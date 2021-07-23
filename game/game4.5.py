@@ -16,6 +16,33 @@ class Player(pygame.sprite.Sprite):
         self.rect = self.image.get_rect(x=x, y=y)
 
 
+class Slime(pygame.sprite.Sprite):
+
+    range = 20
+    current = 0
+    up = True
+
+    def __init__(self, image, x, y):
+        pygame.sprite.Sprite.__init__(self)
+        self.image = pygame.image.load(image)
+        self.rect = self.image.get_rect(x=x, y=y)
+
+    def get_next_pos(self):
+        if self.current == range:
+            up = False
+
+        if self.current == 0:
+            up = True
+
+        if up:
+            self.current += 1
+            self.y += self.current
+
+        if not up:
+            self.current -= 1
+            self.y -= self.current
+
+
 
 player = Player('kaki.png', 30, 30)
 player_vel = 2
