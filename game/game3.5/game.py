@@ -1,5 +1,4 @@
-# display deck in battle mode
-# add card sprites
+# add gui class with some text
 
 import pygame
 from settings import Settings
@@ -8,7 +7,7 @@ from slime import Slime
 from background import Background
 from game_state import GameState
 from battle import Battle
-from deck import Deck
+from gui import GUI
 
 class Game:
     """Overall class to manage game assets and behavior"""
@@ -25,7 +24,8 @@ class Game:
         self.slime1 = Slime('sprites/slime.png', 350, 30)
         self.all_players = pygame.sprite.Group(self.slime1, self.player)
         self.enemies = pygame.sprite.Group(self.slime1)
-        self.deck = Deck(self)
+
+        self.GUI = GUI(self)
 
         self.game_state = GameState.MAP
         self.battle = None
@@ -62,7 +62,7 @@ class Game:
         if self.game_state == GameState.MAP:
             self.all_players.draw(self.screen)
         else:
-            self.deck.draw_hand()
+            self.GUI.drawGUI()
 
         pygame.display.flip()
         pygame.display.update()
