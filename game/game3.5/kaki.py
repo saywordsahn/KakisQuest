@@ -1,19 +1,21 @@
 import pygame
 from spritesheet import SpriteSheet
+from deck import Deck
 
 class Kaki(pygame.sprite.Sprite):
 
-    def __init__(self, image, x, y):
+    def __init__(self, image, x, y, deck):
         pygame.sprite.Sprite.__init__(self)
         sheet = SpriteSheet(image)
         self.imgs = sheet.load_strip((0, 0, 21, 29), 2)
         self.current_img = 0
         self.image = self.imgs[self.current_img]
         self.rect = self.imgs[0].get_rect(x=x, y=y)
-        self.player_vel = 2
+        self.player_vel = 4
         self.frame_index = 0
         self.animation_speed = .05
         self.health = 100
+        self.deck = deck
         for image in self.imgs:
             image.set_colorkey(pygame.Color('black'))
 

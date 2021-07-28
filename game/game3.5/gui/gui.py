@@ -4,11 +4,11 @@ from deck import Deck
 class GUI():
 
     def __init__(self, game):
-        self.deck = Deck(game)
         self.game = game
+        self.selected_sprite = None
 
     def drawGUI(self):
-        self.deck.draw_hand()
+        self.game.deck.draw_hand()
 
         white = pygame.Color('white')
         red = pygame.Color('red')
@@ -36,4 +36,6 @@ class GUI():
         txt_surface = font.render(text, True, white)
 
         self.game.screen.blit(txt_surface, (400, 20))
+
+
 

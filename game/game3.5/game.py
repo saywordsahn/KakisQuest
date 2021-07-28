@@ -8,6 +8,7 @@ from background import Background
 from game_state import GameState
 from battle import Battle
 from gui.gui import GUI
+from deck import Deck
 
 class Game:
     """Overall class to manage game assets and behavior"""
@@ -20,10 +21,11 @@ class Game:
         pygame.display.set_caption("Kaki's Quest")
         self.clock = pygame.time.Clock()
         self.bg = Background()
-        self.player = Kaki('sprites/kaki.png', 30, 30)
         self.slime1 = Slime('sprites/slime.png', 350, 30)
-        self.all_players = pygame.sprite.Group(self.slime1, self.player)
         self.enemies = pygame.sprite.Group(self.slime1)
+        self.deck = Deck(self)
+        self.player = Kaki('sprites/kaki.png', 30, 30, self.deck)
+        self.all_players = pygame.sprite.Group(self.slime1, self.player)
 
         self.GUI = GUI(self)
 
@@ -38,15 +40,17 @@ class Game:
             self._update_screen()
 
     def _check_collisions(self):
-        collide = pygame.sprite.spritecollide(self.player, self.enemies, False)
-        for collision in collide:
-            if collision in self.enemies:
-                self.battle = Battle(self.player, collision)
-                self.game_state = GameState.BATTLE
-                return
+        if self.game_state != GameState.BATTLE:
+            collide = pygame.sprite.spritecollide(self.player, self.enemies, False)
+            for collision in collide:
+                if collision in self.enemies:
+                    self.battle = Battle(self.player, collision)
+                    self.game_state = GameState.BATTLE
+                    return
 
     def _check_events(self):
-        for event in pygame.event.get():
+        events = pygame.event.get()
+        for event in events:
             if event.type == pygame.QUIT:
                 pygame.quit()
                 exit(0)
@@ -56,7 +60,12 @@ class Game:
             self.player.process_events(keys, self.clock.get_time())
             self.enemies.update(self.player)
         else:
-            pass
+            for event in events:
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    for spr in self.deck.card_sprites:
+                        if spr.rect.collidepoint(event.pos):
+                            self.selected_sprite = spr
+                            self.battle.process_play_card(spr)
 
     def _update_screen(self):
         if self.game_state == GameState.MAP:
