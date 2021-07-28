@@ -7,7 +7,7 @@ from slime import Slime
 from background import Background
 from game_state import GameState
 from battle import Battle
-from gui import GUI
+from gui.gui import GUI
 
 class Game:
     """Overall class to manage game assets and behavior"""
