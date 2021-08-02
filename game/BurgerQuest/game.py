@@ -29,7 +29,6 @@ class Game:
 
         self.all_players = pygame.sprite.Group(self.slime1, self.player, self.burger)
 
-
     def run_game(self):
         """Start the main loop of the game"""
         while True:
@@ -49,6 +48,12 @@ class Game:
             self.player.burgers_eaten += 1
             self.burger.rect.x = random.randint(0, self.settings.screen_width)
             self.burger.rect.y = random.randint(0, self.settings.screen_height)
+            if self.player.burgers_eaten % 5 == 0:
+                randx = random.randint(0, self.settings.screen_width)
+                randy = random.randint(0, self.settings.screen_height)
+                newSlime = Npc('sprites/slime.png', randx, randy)
+                self.all_players.add(newSlime)
+                self.enemies.add(newSlime)
 
     def _check_events(self):
 
