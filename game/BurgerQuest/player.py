@@ -13,12 +13,14 @@ class Player(pygame.sprite.Sprite):
         self.player_vel = 2
         self.frame_index = 0
         self.animation_speed = .05
+        self.burgers_eaten = 0
+        self.health = 100
         for image in self.imgs:
             image.set_colorkey(pygame.Color('black'))
 
 
 
-    def process_events(self, keys, frames):
+    def process_events(self, keys, frames, game):
 
         if self.frame_index >= len(self.imgs):
             self.frame_index = 0
@@ -27,10 +29,22 @@ class Player(pygame.sprite.Sprite):
         self.frame_index += self.animation_speed
 
         if keys[pygame.K_LEFT]:
-            self.rect.move_ip(-self.player_vel, 0)
+            if self.rect.x - self.player_vel <= 0:
+                self.rect.x = 0
+            else:
+                self.rect.move_ip(-self.player_vel, 0)
         if keys[pygame.K_RIGHT]:
-            self.rect.move_ip(self.player_vel, 0)
+            if self.rect.right + self.player_vel >= game.settings.screen_width:
+                self.rect.right = game.settings.screen_width
+            else:
+                self.rect.move_ip(self.player_vel, 0)
         if keys[pygame.K_UP]:
-            self.rect.move_ip(0, -self.player_vel)
+            if self.rect.top - self.player_vel <= 0:
+                self.rect.top = 0
+            else:
+                self.rect.move_ip(0, -self.player_vel)
         if keys[pygame.K_DOWN]:
-            self.rect.move_ip(0, self.player_vel)
+            if self.rect.bottom + self.player_vel >= game.settings.screen_height:
+                self.rect.bottom = game.settings.screen_height
+            else:
+                self.rect.move_ip(0, self.player_vel)
