@@ -21,12 +21,13 @@ class Game:
         self.bg = Background()
         self.font = pygame.font.Font(None, 28)
         self.player = Player('sprites/kaki.png', 30, 30)
-        self.slime1 = Npc('sprites/slime.png', 350, 30, SlimeType.FOLLOW, self.settings.screen_width)
+        self.slime1 = Npc('sprites/slime.png', 350, 30, SlimeType.HORIZONTAL, self.settings)
         self.enemies = pygame.sprite.Group(self.slime1)
         self.gameOver = False
 
         self.burger = Burger('sprites/burger.png', 40, 100)
         self.burgers = pygame.sprite.Group(self.burger)
+        self.spawnable_enemies = [SlimeType.HORIZONTAL, SlimeType.VERTICAL]
 
         self.all_players = pygame.sprite.Group(self.slime1, self.player, self.burger)
 
@@ -52,7 +53,8 @@ class Game:
             if self.player.burgers_eaten % 1 == 0:
                 randx = random.randint(0, self.settings.screen_width)
                 randy = random.randint(0, self.settings.screen_height)
-                newSlime = Npc('sprites/slime.png', randx, randy, random.choice(list(SlimeType)), self.settings.screen_width)
+                random.seed(pygame.time.get_ticks())
+                newSlime = Npc('sprites/slime.png', randx, randy, random.choice(self.spawnable_enemies), self.settings)
                 self.all_players.add(newSlime)
                 self.enemies.add(newSlime)
 
