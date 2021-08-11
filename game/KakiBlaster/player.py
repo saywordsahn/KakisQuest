@@ -1,5 +1,6 @@
 import pygame
 from spritesheet import SpriteSheet
+from gun import Gun
 
 class Player(pygame.sprite.Sprite):
 
@@ -14,20 +15,11 @@ class Player(pygame.sprite.Sprite):
         self.frame_index = 0
         self.animation_speed = .05
         self.burgers_eaten = 0
-        self.health = 100
+        self.health = 1000000
         for image in self.imgs:
             image.set_colorkey(pygame.Color('black'))
 
-
-        # gun
-        self.gun_right_x_offset = 7
-        self.gun_right_y_offset = 13
-        self.gun = pygame.sprite.Sprite()
-        self.gun.image = pygame.image.load('sprites/gun.png').convert_alpha()
-        self.gun.rect = self.gun.image.get_rect()
-        self.gun.rect.x = self.rect.x + self.gun_right_x_offset
-        self.gun.rect.x = self.rect.y + self.gun_right_y_offset
-
+        self.gun = Gun(x, y)
 
 
     def process_events(self, keys, frames, game):
@@ -41,30 +33,29 @@ class Player(pygame.sprite.Sprite):
         if keys[pygame.K_LEFT]:
             if self.rect.x - self.player_vel <= 0:
                 self.rect.x = 0
-                self.gun.rect.x = self.rect.x + self.gun_right_x_offset
             else:
                 self.rect.move_ip(-self.player_vel, 0)
-                self.gun.rect.move_ip(-self.player_vel, 0)
 
         if keys[pygame.K_RIGHT]:
             if self.rect.right + self.player_vel >= game.settings.screen_width:
                 self.rect.right = game.settings.screen_width
-                self.gun.rect.x = self.rect.x + self.gun_right_x_offset
             else:
                 self.rect.move_ip(self.player_vel, 0)
-                self.gun.rect.x = self.rect.x + self.gun_right_x_offset
         if keys[pygame.K_UP]:
             if self.rect.top - self.player_vel <= 0:
                 self.rect.top = 0
-                self.gun.rect.top = self.gun_right_y_offset
             else:
                 self.rect.move_ip(0, -self.player_vel)
-                self.gun.rect.y = self.rect.y + self.gun_right_y_offset
 
         if keys[pygame.K_DOWN]:
             if self.rect.bottom + self.player_vel >= game.settings.screen_height:
                 self.rect.bottom = game.settings.screen_height
-                self.gun.rect.y = self.rect.x + self.gun_right_y_offset
             else:
                 self.rect.move_ip(0, self.player_vel)
-                self.gun.rect.y = self.rect.y + self.gun_right_y_offset
+
+        self.gun.update_pos(self.rect.x, self.rect.y)
+
+
+        if keys[pygame.K_SPACE] and self.gun.can_shoot():
+            self.gun.shoot()
+            print('kaki pulls the trigger')

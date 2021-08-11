@@ -80,6 +80,7 @@ class Game:
         self.screen.blit(health_txt_surface, (560, 0))
 
     def _update_screen(self):
+        self.screen.fill((100, 100, 100))
 
         if not self.gameOver:
             self._draw_hud()
@@ -91,9 +92,7 @@ class Game:
             self.screen.blit(game_over_text_surface, (self.settings.screen_width // 2, self.settings.screen_height // 2))
 
         pygame.display.flip()
-        pygame.display.update()
         self.clock.tick(self.settings.fps)
-        self.screen.fill(pygame.color.Color('green'))
 
 
 

@@ -2,6 +2,7 @@
 import pygame
 import random
 
+from slimeType import SlimeType
 from settings import Settings
 from player import Player
 from npc import Npc
@@ -20,7 +21,7 @@ class Game:
         self.bg = Background()
         self.font = pygame.font.Font(None, 28)
         self.player = Player('sprites/kaki.png', 30, 30)
-        self.slime1 = Npc('sprites/slime.png', 350, 30)
+        self.slime1 = Npc('sprites/slime.png', 350, 30, SlimeType.FOLLOW, self.settings.screen_width)
         self.enemies = pygame.sprite.Group(self.slime1)
         self.gameOver = False
 
@@ -48,10 +49,10 @@ class Game:
             self.player.burgers_eaten += 1
             self.burger.rect.x = random.randint(0, self.settings.screen_width)
             self.burger.rect.y = random.randint(0, self.settings.screen_height)
-            if self.player.burgers_eaten % 5 == 0:
+            if self.player.burgers_eaten % 1 == 0:
                 randx = random.randint(0, self.settings.screen_width)
                 randy = random.randint(0, self.settings.screen_height)
-                newSlime = Npc('sprites/slime.png', randx, randy)
+                newSlime = Npc('sprites/slime.png', randx, randy, random.choice(list(SlimeType)), self.settings.screen_width)
                 self.all_players.add(newSlime)
                 self.enemies.add(newSlime)
 
